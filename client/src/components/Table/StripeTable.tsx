@@ -12,15 +12,15 @@ const StripeTable: React.FC<StripeTableProps> = ({ headers, data }) => {
       <thead>
         <tr>
           {headers.map((el) => (
-            <th>{el.name}</th>
+            <th key={`${el.key}_${el.name}`}>{el.name}</th>
           ))}
         </tr>
       </thead>
       <tbody>
         {data.map((row) => (
-          <tr>
+          <tr key={row.id}>
             {headers.map((el) => (
-              <td>{row[el.key]}</td>
+              <td key={`${row.id}_${el.key}`}>{row[el.key]}</td>
             ))}
           </tr>
         ))}

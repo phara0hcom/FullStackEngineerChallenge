@@ -12,10 +12,8 @@ const userDB = {
     new Promise((resolve, reject) => {
       pool.query(`SELECT * FROM users`, (err, results) => {
         if (err) {
-          console.log({ err });
           return reject(err);
         } else {
-          console.log({ results });
           return resolve(results);
         }
       });
@@ -52,6 +50,30 @@ const userDB = {
           );
           break;
       }
+    }),
+  putById: (id, data) =>
+    new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE users SET firstName = ?, lastName = ?, email = ? , lastReview = ?, reviews = ?, assignTo = ? WHERE id = ?`,
+        [
+          data.firstName,
+          data.lastName,
+          data.email,
+          data.lastReview,
+          data.reviews,
+          data.assignTo,
+          id,
+        ],
+        (err, results) => {
+          if (err) {
+            console.log("putById", { err });
+            return reject(err);
+          } else {
+            console.log("putById", { results });
+            return resolve(results);
+          }
+        }
+      );
     }),
 };
 

@@ -22,6 +22,19 @@ export const getListCall = (): AppThunk => (dispatch) => {
     });
 };
 
-export const changeAssigneeThunk = (id: number): AppThunk => (dispatch) => {
+export const changeAssigneeThunk = (
+  id: number,
+  newData: RawTableData
+): AppThunk => (dispatch) => {
   dispatch(actions.assign.changeSaving());
+  axios
+    .put(`/${id}`, newData)
+    .then((res) => {
+      console.log({ res });
+      dispatch(actions.assign.changesSaved());
+    })
+    .catch((err) => {
+      console.log({ err });
+      dispatch(actions.assign.changesFailed(err.message));
+    });
 };

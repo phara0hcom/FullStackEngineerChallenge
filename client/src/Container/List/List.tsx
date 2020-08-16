@@ -91,8 +91,14 @@ const List: React.SFC<ListProps> = ({
   );
 
   const saveAssignTo = (id: number) => () => {
+    const oldData = employeesObj[`${id}`];
     // save to DB
-    dispatch(changeAssigneeThunk(id));
+    dispatch(
+      changeAssigneeThunk(id, {
+        ...oldData,
+        assignTo: editAssignInputVal,
+      })
+    );
   };
 
   const assignToInput = (id: number) => (

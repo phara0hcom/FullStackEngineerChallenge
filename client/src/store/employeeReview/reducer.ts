@@ -36,7 +36,10 @@ export default function employeeReview(
       return state.set("editAssignId", action.payload?.editAssignId);
 
     case constants.CHANGE_SAVING_ASSIGNEE:
-      return state.set("editAssignSaving", !state.get("editAssignSaving"));
+      return state.set("editAssignSaving", true);
+
+    case constants.CHANGED_ASSIGNEE_SAVED:
+      return state.set("editAssignSaving", false).set("editAssignId", -1);
 
     default:
       return state;

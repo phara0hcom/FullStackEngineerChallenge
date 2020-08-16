@@ -26,6 +26,13 @@ const Actions = {
     changeSaving: () => ({
       type: Constants.CHANGE_SAVING_ASSIGNEE,
     }),
+    changesSaved: () => ({
+      type: Constants.CHANGED_ASSIGNEE_SAVED,
+    }),
+    changesFailed: (error: string) => ({
+      type: Constants.FAILED_CHANGE_ASSIGNEE,
+      payload: { error },
+    }),
   },
 };
 
