@@ -10,7 +10,7 @@ const pool = mysql.createPool({
 const userDB = {
   all: () =>
     new Promise((resolve, reject) => {
-      pool.query(`SELECT * FROM users`, (err, results) => {
+      pool.query(`SELECT * FROM employees`, (err, results) => {
         if (err) {
           return reject(err);
         } else {
@@ -24,7 +24,7 @@ const userDB = {
       switch (by) {
         case "id":
           pool.query(
-            `SELECT * FROM users WHERE id = ?`,
+            `SELECT * FROM employees WHERE id = ?`,
             value,
             (err, results) => {
               if (err) {
@@ -38,7 +38,7 @@ const userDB = {
 
         default:
           pool.query(
-            `SELECT * FROM users WHERE name = ?`,
+            `SELECT * FROM employees WHERE name = ?`,
             value,
             (err, results) => {
               if (err) {
@@ -55,7 +55,7 @@ const userDB = {
   putById: (id, data) =>
     new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE users SET firstName = ?, lastName = ?, email = ? , lastReview = ?, reviews = ?, assignTo = ? WHERE id = ?`,
+        `UPDATE employees SET firstName = ?, lastName = ?, email = ? , lastReview = ?, reviews = ?, assignTo = ? WHERE id = ?`,
         [
           data.firstName,
           data.lastName,
@@ -79,7 +79,7 @@ const userDB = {
 
   deleteById: (id) =>
     new Promise((resolve, reject) => {
-      pool.query(`DELETE FROM users WHERE id = ?`, id, (err, results) => {
+      pool.query(`DELETE FROM employees WHERE id = ?`, id, (err, results) => {
         if (err) {
           return reject(err);
         } else {

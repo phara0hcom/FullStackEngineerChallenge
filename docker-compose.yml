@@ -17,7 +17,7 @@ services:
       - 3306:3306
     restart: unless-stopped
     volumes:
-      - ./db/usersDump.sql:/docker-entrypoint-initdb.d/usersDump.sql
+      - ./db/mysqldb.sql:/docker-entrypoint-initdb.d/mysqldb.sql
   phpmyadmin:
     depends_on:
       - mysql
