@@ -46,4 +46,16 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
+router.delete("/:id", async (req, res, next) => {
+  console.log({ body: req.body });
+  console.log({ params: req.params });
+  try {
+    const response = await userDB.deleteById(req.params.id, req.body);
+    res.json({ status: "deleted", id: req.params.id });
+  } catch (error) {
+    console.log({ error });
+    res.statusCode(500);
+  }
+});
+
 module.exports = router;

@@ -51,6 +51,7 @@ const userDB = {
           break;
       }
     }),
+
   putById: (id, data) =>
     new Promise((resolve, reject) => {
       pool.query(
@@ -74,6 +75,17 @@ const userDB = {
           }
         }
       );
+    }),
+
+  deleteById: (id) =>
+    new Promise((resolve, reject) => {
+      pool.query(`DELETE FROM users WHERE id = ?`, id, (err, results) => {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(results);
+        }
+      });
     }),
 };
 

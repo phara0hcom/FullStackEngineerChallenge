@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { ConnectedProps, connect, useDispatch } from "react-redux";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
@@ -6,22 +7,26 @@ import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 
 import { Employee, RawTableData } from "../../store/employeeReview/types";
+import { RootStore } from "../../store/rootReducer";
 import employeeReviewActions from "../../store/employeeReview/actions";
+import {
+  getListCall,
+  changeAssigneeThunk,
+  deleteById,
+} from "../../store/employeeReview/thunkFunc";
+
 import { unixToFormattedDate } from "../../utils/dateUtils";
 import { stringToJSON } from "../../utils/dataUtils";
 
 import Section from "../../components/Layout/Section";
-import { RootStore } from "../../store/rootReducer";
 import Loading from "../../components/Layout/Loading";
-import {
-  getListCall,
-  changeAssigneeThunk,
-} from "../../store/employeeReview/thunkFunc";
 import StripeTable from "../../components/Table/StripeTable";
-import { Link } from "react-router-dom";
+import ConfirmModal from "../../components/Layout/ConfirmModal";
+import AlertDismiss from "../../components/Layout/AlertDismiss";
 
 interface ListReduxProps {
   loadingList: boolean;
+  errorMessage: null | string;
   employees: Array<RawTableData>;
   employeesObj: { [key: string]: RawTableData };
   editAssignId: number;
@@ -33,6 +38,7 @@ const mapStateToProps = (state: RootStore): ListReduxProps => {
 
   return {
     loadingList: employeeReviewJS.loadingList,
+    errorMessage: employeeReviewJS.errorMessage,
     employees: employeeReviewJS.employees,
     employeesObj: employeeReviewJS.employeesObj,
     editAssignId: employeeReviewJS.editAssignId,
@@ -48,6 +54,7 @@ type ListProps = PropsFromRedux;
 
 const List: React.SFC<ListProps> = ({
   loadingList,
+  errorMessage,
   employees,
   employeesObj,
   editAssignId,
@@ -55,6 +62,8 @@ const List: React.SFC<ListProps> = ({
 }) => {
   const dispatch = useDispatch();
   const [editAssignInputVal, changeAssignInput] = useState("");
+  const [deleteModal, setDeleteModal] = useState({ show: false, id: -1 });
+
   useEffect(() => {
     if (loadingList) {
       dispatch(getListCall());
@@ -65,8 +74,20 @@ const List: React.SFC<ListProps> = ({
 
   const deleteRow = (id: number) => () => {
     // show model
-    // on confirm Delete
-    console.log({ id });
+    setDeleteModal({ show: true, id });
+  };
+
+  const hideDeleteModal = () => {
+    setDeleteModal({ show: false, id: -1 });
+  };
+
+  /**
+   * When you press delete on
+   * @param id {number} employee ID
+   */
+  const confirmDelete = (id: number) => () => {
+    hideDeleteModal();
+    dispatch(deleteById(id));
   };
 
   const editAssign = (id: number) => () => {
@@ -99,6 +120,10 @@ const List: React.SFC<ListProps> = ({
         assignTo: editAssignInputVal,
       })
     );
+  };
+
+  const dismissAlert = () => {
+    dispatch(employeeReviewActions.employeeList.hideError());
   };
 
   const assignToInput = (id: number) => (
@@ -149,6 +174,13 @@ const List: React.SFC<ListProps> = ({
   return (
     <Section>
       <h1>List</h1>
+      {errorMessage ? (
+        <AlertDismiss
+          dismissAlert={dismissAlert}
+          heading="An error occurred"
+          body={`Error: ${errorMessage}`}
+        />
+      ) : null}
       {loadingList ? (
         <Loading isLocal />
       ) : (
@@ -165,6 +197,15 @@ const List: React.SFC<ListProps> = ({
           data={processEmployeeTable(employees)}
         />
       )}
+      <ConfirmModal
+        show={deleteModal.show}
+        handleClose={hideDeleteModal}
+        handleConfirm={confirmDelete(deleteModal.id)}
+        heading={`Deleting id: ${deleteModal.id}`}
+        body={`Are sure you want to Delete id: ${deleteModal.id}, press Delete to confirm`}
+        confirmLabel="Delete"
+        confirmVariant="danger"
+      />
     </Section>
   );
 };

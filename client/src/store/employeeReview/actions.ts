@@ -13,9 +13,12 @@ const Actions = {
       type: Constants.PUT_EMPLOYEES_LIST,
       payload: { employees, employeesObj },
     }),
-    failList: (error: string) => ({
-      type: Constants.FAILED_EMPLOYEES_LIST,
+    showError: (error: string) => ({
+      type: Constants.SHOW_ERROR_EMPLOYEES_LIST,
       payload: { error },
+    }),
+    hideError: () => ({
+      type: Constants.SHOW_ERROR_EMPLOYEES_LIST,
     }),
   },
   assign: {
@@ -28,10 +31,6 @@ const Actions = {
     }),
     changesSaved: () => ({
       type: Constants.CHANGED_ASSIGNEE_SAVED,
-    }),
-    changesFailed: (error: string) => ({
-      type: Constants.FAILED_CHANGE_ASSIGNEE,
-      payload: { error },
     }),
   },
 };

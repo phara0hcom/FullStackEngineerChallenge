@@ -18,7 +18,7 @@ export const getListCall = (): AppThunk => (dispatch) => {
       dispatch(actions.employeeList.putList(res.data, employeesObj));
     })
     .catch((err) => {
-      dispatch(actions.employeeList.failList(err.message));
+      dispatch(actions.employeeList.showError(err.message));
     });
 };
 
@@ -35,6 +35,20 @@ export const changeAssigneeThunk = (
     })
     .catch((err) => {
       console.log({ err });
-      dispatch(actions.assign.changesFailed(err.message));
+      dispatch(actions.employeeList.showError(err.message));
+    });
+};
+
+export const deleteById = (id: number): AppThunk => (dispatch) => {
+  dispatch(actions.employeeList.getList());
+  axios
+    .delete(`/${id}`)
+    .then((res) => {
+      console.log({ res });
+      dispatch(getListCall());
+    })
+    .catch((err) => {
+      console.log({ err });
+      dispatch(actions.employeeList.showError(err.message));
     });
 };

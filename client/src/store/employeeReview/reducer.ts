@@ -4,7 +4,7 @@ import constants from "./constants";
 
 const defaultState = fromJS({
   loadingList: true,
-  loadingError: null,
+  errorMessage: null,
   loadingEmployee: true,
   employees: [],
   employeesObj: {},
@@ -27,10 +27,13 @@ export default function employeeReview(
         .set("employees", fromJS(action.payload?.employees || []))
         .set("employeesObj", fromJS(action.payload?.employeesObj));
 
-    case constants.FAILED_EMPLOYEES_LIST:
+    case constants.SHOW_ERROR_EMPLOYEES_LIST:
       return state
         .set("loadingList", false)
-        .set("loadingError", action.payload?.error || null);
+        .set("errorMessage", action.payload?.error || null);
+
+    case constants.HIDE_ERROR_EMPLOYEES_LIST:
+      return state.set("loadingList", false).set("errorMessage", null);
 
     case constants.CHANGE_ASSIGNEE_INFO:
       return state.set("editAssignId", action.payload?.editAssignId);

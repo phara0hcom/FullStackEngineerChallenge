@@ -41,7 +41,7 @@ export interface EmployeeReviewStore {
     employees: Array<RawTableData>;
     employeesObj: { [key: string]: RawTableData };
     selected: Employee;
-    loadingError: null | string;
+    errorMessage: null | string;
     editAssignId: number;
     editAssignSaving: boolean;
   };
