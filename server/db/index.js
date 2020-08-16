@@ -12,8 +12,10 @@ const userDB = {
     new Promise((resolve, reject) => {
       pool.query(`SELECT * FROM users`, (err, results) => {
         if (err) {
+          console.log({ err });
           return reject(err);
         } else {
+          console.log({ results });
           return resolve(results);
         }
       });
