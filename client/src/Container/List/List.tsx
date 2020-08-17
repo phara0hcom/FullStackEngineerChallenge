@@ -3,20 +3,13 @@ import { Link } from "react-router-dom";
 import { ConnectedProps, connect, useDispatch } from "react-redux";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
-import InputGroup from "react-bootstrap/InputGroup";
-import FormControl from "react-bootstrap/FormControl";
 
 import { Employee, RawTableData } from "../../store/employeeReview/types";
 import { RootStore } from "../../store/rootReducer";
 import employeeReviewActions from "../../store/employeeReview/actions";
-import {
-  getListCall,
-  changeAssigneeThunk,
-  deleteById,
-} from "../../store/employeeReview/thunkFunc";
+import { getListCall, deleteById } from "../../store/employeeReview/thunkFunc";
 
 import { unixToFormattedDate } from "../../utils/dateUtils";
-import { stringToJSON } from "../../utils/dataUtils";
 
 import Section from "../../components/Layout/Section";
 import Loading from "../../components/Layout/Loading";
@@ -28,9 +21,6 @@ interface ListReduxProps {
   loadingList: boolean;
   errorMessage: null | string;
   employees: Array<RawTableData>;
-  employeesObj: { [key: string]: RawTableData };
-  editAssignId: number;
-  editAssignSaving: boolean;
 }
 
 const mapStateToProps = (state: RootStore): ListReduxProps => {
@@ -40,9 +30,6 @@ const mapStateToProps = (state: RootStore): ListReduxProps => {
     loadingList: employeeReviewJS.loadingList,
     errorMessage: employeeReviewJS.errorMessage,
     employees: employeeReviewJS.employees,
-    employeesObj: employeeReviewJS.employeesObj,
-    editAssignId: employeeReviewJS.editAssignId,
-    editAssignSaving: employeeReviewJS.editAssignSaving,
   };
 };
 
@@ -56,12 +43,8 @@ const List: React.SFC<ListProps> = ({
   loadingList,
   errorMessage,
   employees,
-  employeesObj,
-  editAssignId,
-  editAssignSaving,
 }) => {
   const dispatch = useDispatch();
-  const [editAssignInputVal, changeAssignInput] = useState("");
   const [deleteModal, setDeleteModal] = useState({ show: false, id: -1 });
 
   useEffect(() => {
@@ -86,15 +69,8 @@ const List: React.SFC<ListProps> = ({
    * @param id {number} employee ID
    */
   const confirmDelete = (id: number) => () => {
-    hideDeleteModal();
     dispatch(deleteById(id));
-  };
-
-  const editAssign = (id: number) => () => {
-    console.log(employeesObj);
-    const assignTo = employeesObj[`${id}`].assignTo || "";
-    changeAssignInput(assignTo);
-    dispatch(employeeReviewActions.assign.changeId(id));
+    hideDeleteModal();
   };
 
   const addButtons = (id: number) => (
@@ -105,68 +81,24 @@ const List: React.SFC<ListProps> = ({
       <Button size="sm" variant="danger" onClick={deleteRow(id)}>
         Delete
       </Button>
-      <Button size="sm" variant="success" onClick={editAssign(id)}>
-        Assign to
-      </Button>
     </ButtonGroup>
   );
-
-  const saveAssignTo = (id: number) => () => {
-    const oldData = employeesObj[`${id}`];
-    // save to DB
-    dispatch(
-      changeAssigneeThunk(id, {
-        ...oldData,
-        assignTo: editAssignInputVal,
-      })
-    );
-  };
 
   const dismissAlert = () => {
     dispatch(employeeReviewActions.employeeList.hideError());
   };
 
-  const assignToInput = (id: number) => (
-    <InputGroup className="mb-3">
-      <FormControl
-        disabled={editAssignSaving}
-        placeholder="Manager Name"
-        aria-label="Manager Name"
-        aria-describedby="basic-addon2"
-        value={editAssignInputVal}
-        onChange={(event) => changeAssignInput(event.target.value)}
-      />
-      <InputGroup.Append>
-        <Button
-          disabled={editAssignSaving}
-          onClick={saveAssignTo(id)}
-          variant="outline-secondary"
-        >
-          {editAssignSaving ? "Saving" : "Save"}
-        </Button>
-      </InputGroup.Append>
-    </InputGroup>
-  );
-
   const processEmployeeTable = (
     rawData: Array<RawTableData>
-  ): Array<
-    Employee & { buttons: JSX.Element; assignTo: JSX.Element | string }
-  > =>
+  ): Array<Employee & { buttons: JSX.Element }> =>
     rawData.map((row) => {
       const lastReview = row.lastReview;
-      let assignTo: JSX.Element | string = row.assignTo || "";
-      const reviews = row.reviews;
       const id = row.id;
 
-      if (id === editAssignId) {
-        assignTo = assignToInput(id);
-      }
       return {
         ...row,
+        manager: row.manager || "",
         lastReview: lastReview ? unixToFormattedDate(lastReview) : "",
-        assignTo: assignTo ? assignTo : "",
-        reviews: stringToJSON(reviews),
         buttons: addButtons(id),
       };
     });
@@ -191,7 +123,7 @@ const List: React.SFC<ListProps> = ({
             { name: "Last name", key: "lastName" },
             { name: "First name", key: "firstName" },
             { name: "email", key: "email" },
-            { name: "Assigned to", key: "assignTo" },
+            { name: "Manager", key: "manager" },
             { name: "Edit", key: "buttons" },
           ]}
           data={processEmployeeTable(employees)}

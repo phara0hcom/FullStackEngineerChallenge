@@ -21,16 +21,34 @@ const Actions = {
       type: Constants.SHOW_ERROR_EMPLOYEES_LIST,
     }),
   },
-  assign: {
-    changeId: (editAssignId: number) => ({
-      type: Constants.CHANGE_ASSIGNEE_INFO,
-      payload: { editAssignId },
+  editor: {
+    setLoading: () => ({
+      type: Constants.EDITOR_SET_LOADING,
     }),
-    changeSaving: () => ({
-      type: Constants.CHANGE_SAVING_ASSIGNEE,
+    loadEmployee: (employee: RawTableData) => ({
+      type: Constants.EDITOR_SET_EMPLOYEE_FORM,
+      payload: { employee },
     }),
-    changesSaved: () => ({
-      type: Constants.CHANGED_ASSIGNEE_SAVED,
+    editForm: (
+      input: "firstName" | "lastName" | "email" | "manager",
+      value: string
+    ) => ({
+      type: Constants.EDITOR_CHANGE_FORM,
+      payload: { input, value },
+    }),
+    sending: () => ({
+      type: Constants.EDITOR_SENDING,
+    }),
+    savedEdit: (id: number) => ({
+      type: Constants.EDITOR_EDIT_SAVED,
+      payload: { id },
+    }),
+    showError: (error: string) => ({
+      type: Constants.EDITOR_SHOW_ERROR,
+      payload: { error },
+    }),
+    hideError: () => ({
+      type: Constants.EDITOR_HIDE_ERROR,
     }),
   },
 };

@@ -1,16 +1,17 @@
 export interface RawTableData {
-  assignTo: null | string;
-  email: string;
-  firstName: string;
   id: number;
+  firstName: string;
   lastName: string;
+  email: string;
+  manager: string;
   lastReview: null | number;
-  reviews: string;
 }
 
 export type Reviews = Array<{
+  id: number;
   date: number;
   reviewer: string;
+  employee: string;
   reviewText: string;
 }>;
 
@@ -19,8 +20,8 @@ export interface Employee {
   firstName: string;
   lastName: string;
   email: string;
+  manager: string;
   lastReview: string;
-  reviews: Reviews | null;
 }
 
 export interface EmployeeReviewStoreActions {
@@ -29,20 +30,23 @@ export interface EmployeeReviewStoreActions {
     employees?: Array<RawTableData>;
     employeesObj?: { [key: string]: RawTableData };
     error?: string;
-    editAssignId?: number;
-    editAssignSaving?: boolean;
+    id?: number;
+    employee?: RawTableData;
+    input?: string;
+    value?: string;
   };
 }
 
 export interface EmployeeReviewStore {
   toJS: () => {
-    loadingList: true;
-    loadingEmployee: true;
+    loadingList: boolean;
+    loadingEditor: boolean;
+    loadingEmployee: boolean;
     employees: Array<RawTableData>;
     employeesObj: { [key: string]: RawTableData };
-    selected: Employee;
+    employeeForm: RawTableData;
     errorMessage: null | string;
     editAssignId: number;
-    editAssignSaving: boolean;
+    employeeSending: boolean | number;
   };
 }

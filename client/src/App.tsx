@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Header from "./components/Header/Header";
-import Editor from "./Container/Editor/Editor";
-import List from "./Container/List/List";
+import EmployeeEditor from "./container/EmployeeEditor/EmployeeEditor";
+import List from "./container/List/List";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
       <Header />
       <Switch>
         <Route path="/edit/:id">
-          <Editor />
+          <EmployeeEditor />
         </Route>
         <Route path="/">
           <List />

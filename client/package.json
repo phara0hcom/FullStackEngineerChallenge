@@ -49,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^3.9.0",
     "eslint": "6.6.0"
   }
 }
