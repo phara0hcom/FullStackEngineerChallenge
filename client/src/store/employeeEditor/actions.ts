@@ -1,26 +1,7 @@
 import Constants from "./constants";
-import { RawTableData } from "./types";
+import { RawTableData } from "../employeeList/types";
 
 const Actions = {
-  employeeList: {
-    getList: () => ({
-      type: Constants.GET_EMPLOYEES_LIST,
-    }),
-    putList: (
-      employees: Array<RawTableData>,
-      employeesObj: { [key: string]: RawTableData }
-    ) => ({
-      type: Constants.PUT_EMPLOYEES_LIST,
-      payload: { employees, employeesObj },
-    }),
-    showError: (error: string) => ({
-      type: Constants.SHOW_ERROR_EMPLOYEES_LIST,
-      payload: { error },
-    }),
-    hideError: () => ({
-      type: Constants.SHOW_ERROR_EMPLOYEES_LIST,
-    }),
-  },
   editor: {
     setLoading: () => ({
       type: Constants.EDITOR_SET_LOADING,

@@ -4,10 +4,10 @@ import { ConnectedProps, connect, useDispatch } from "react-redux";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 
-import { Employee, RawTableData } from "../../store/employeeReview/types";
+import { Employee, RawTableData } from "../../store/employeeList/types";
 import { RootStore } from "../../store/rootReducer";
-import employeeReviewActions from "../../store/employeeReview/actions";
-import { getListCall, deleteById } from "../../store/employeeReview/thunkFunc";
+import employeeListActions from "../../store/employeeList/actions";
+import { getListCall, deleteById } from "../../store/employeeList/thunkFunc";
 
 import { unixToFormattedDate } from "../../utils/dateUtils";
 
@@ -24,12 +24,12 @@ interface ListReduxProps {
 }
 
 const mapStateToProps = (state: RootStore): ListReduxProps => {
-  const employeeReviewJS = state.employeeReview.toJS();
+  const employeeListJS = state.employeeList.toJS();
 
   return {
-    loadingList: employeeReviewJS.loadingList,
-    errorMessage: employeeReviewJS.errorMessage,
-    employees: employeeReviewJS.employees,
+    loadingList: employeeListJS.loadingList,
+    errorMessage: employeeListJS.errorMessage,
+    employees: employeeListJS.employees,
   };
 };
 
@@ -85,7 +85,7 @@ const List: React.SFC<ListProps> = ({
   );
 
   const dismissAlert = () => {
-    dispatch(employeeReviewActions.employeeList.hideError());
+    dispatch(employeeListActions.employeeList.hideError());
   };
 
   const processEmployeeTable = (

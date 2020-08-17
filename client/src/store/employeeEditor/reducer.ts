@@ -1,47 +1,27 @@
 import { fromJS } from "immutable";
-import { EmployeeReviewStoreActions, EmployeeReviewStore } from "./types";
+import { EmployeeEditorStoreActions, EmployeeEditorStore } from "./types";
 import constants, { emptyEmployee } from "./constants";
 
 const defaultState = fromJS({
-  loadingList: true,
   loadingEditor: true,
   errorMessage: null,
-  loadingEmployee: true,
-  employees: [],
-  employeesObj: {},
   employeeForm: emptyEmployee,
   employeeSending: false,
 });
 
-export default function employeeReview(
+export default function employeeList(
   state = defaultState,
-  action: EmployeeReviewStoreActions
-): EmployeeReviewStore {
+  action: EmployeeEditorStoreActions
+): EmployeeEditorStore {
   switch (action.type) {
-    case constants.GET_EMPLOYEES_LIST:
-      return state.set("loadingList", true);
-
-    case constants.PUT_EMPLOYEES_LIST:
-      return state
-        .set("loadingList", false)
-        .set("employees", fromJS(action.payload?.employees || []))
-        .set("employeesObj", fromJS(action.payload?.employeesObj));
-
-    case constants.SHOW_ERROR_EMPLOYEES_LIST:
-      return state
-        .set("loadingList", false)
-        .set("errorMessage", action.payload?.error || null);
-
-    case constants.HIDE_ERROR_EMPLOYEES_LIST:
-      return state.set("loadingList", false).set("errorMessage", null);
-
     case constants.EDITOR_SET_LOADING:
       return state.set("loadingEditor", true).set("employeeSending", false);
 
     case constants.EDITOR_SET_EMPLOYEE_FORM:
       return state
         .set("employeeForm", action.payload?.employee)
-        .set("loadingEditor", false);
+        .set("loadingEditor", false)
+        .set("employeeSending", false);
 
     case constants.EDITOR_CHANGE_FORM: {
       const input = action.payload?.input;
@@ -56,13 +36,16 @@ export default function employeeReview(
       return state.set("employeeSending", true);
 
     case constants.EDITOR_EDIT_SAVED:
-      return state.set("employeeSending", action.payload?.id);
+      return state.set("employeeSending", false).set("employeeForm", {
+        ...state.get("employeeForm"),
+        id: action.payload?.id,
+      });
 
     case constants.EDITOR_SHOW_ERROR:
       return state.set("errorMessage", action.payload?.error || null);
 
     case constants.EDITOR_HIDE_ERROR:
-      return state.set("errorMessage", null).set("employeeSending", -1);
+      return state.set("errorMessage", null).set("employeeSending", false);
 
     default:
       return state;

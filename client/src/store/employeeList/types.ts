@@ -24,7 +24,7 @@ export interface Employee {
   lastReview: string;
 }
 
-export interface EmployeeReviewStoreActions {
+export interface EmployeeListStoreActions {
   type: string;
   payload: {
     employees?: Array<RawTableData>;
@@ -37,16 +37,10 @@ export interface EmployeeReviewStoreActions {
   };
 }
 
-export interface EmployeeReviewStore {
+export interface EmployeeListStore {
   toJS: () => {
     loadingList: boolean;
-    loadingEditor: boolean;
-    loadingEmployee: boolean;
     employees: Array<RawTableData>;
-    employeesObj: { [key: string]: RawTableData };
-    employeeForm: RawTableData;
     errorMessage: null | string;
-    editAssignId: number;
-    employeeSending: boolean | number;
   };
 }

@@ -1,12 +1,15 @@
 import { combineReducers } from "redux";
 
-import employeeReview from "./employeeReview/reducer";
-import { EmployeeReviewStore } from "./employeeReview/types";
+import employeeList from "./employeeList/reducer";
+import employeeEditor from "./employeeEditor/reducer";
+import { EmployeeListStore } from "./employeeList/types";
+import { EmployeeEditorStore } from "./employeeEditor/types";
 import { ThunkAction } from "redux-thunk";
 import { Action } from "redux";
 
 export interface RootStore {
-  employeeReview: EmployeeReviewStore;
+  employeeList: EmployeeListStore;
+  employeeEditor: EmployeeEditorStore;
 }
 
 export type AppThunk<ReturnType = void> = ThunkAction<
@@ -17,7 +20,8 @@ export type AppThunk<ReturnType = void> = ThunkAction<
 >;
 
 const rootReducer = combineReducers({
-  employeeReview,
+  employeeList,
+  employeeEditor,
 });
 
 export default rootReducer;

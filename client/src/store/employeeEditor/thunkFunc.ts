@@ -1,27 +1,10 @@
+import { AxiosResponse } from "axios";
+
 import axios from "../../constants/axios";
 import actions from "./actions";
 import { AppThunk } from "../rootReducer";
-import { RawTableData } from "./types";
-import { AxiosResponse } from "axios";
+import { RawTableData } from "../employeeList/types";
 import { emptyEmployee } from "./constants";
-
-export const getListCall = (): AppThunk => (dispatch) => {
-  dispatch(actions.employeeList.getList());
-  axios
-    .get("/employee")
-    .then((res: AxiosResponse<Array<RawTableData>>) => {
-      const employeesObj: { [key: string]: RawTableData } = {};
-      res.data.forEach((row: RawTableData) => {
-        employeesObj[`${row.id}`] = { ...row };
-      });
-
-      console.log({ employeesObj });
-      dispatch(actions.employeeList.putList(res.data, employeesObj));
-    })
-    .catch((err) => {
-      dispatch(actions.employeeList.showError(err.message));
-    });
-};
 
 export const changeEmployeeThunk = (
   id: number,
@@ -32,24 +15,25 @@ export const changeEmployeeThunk = (
     .put(`/employee/edit/${id}`, newData)
     .then((res) => {
       console.log({ res });
+      dispatch(actions.editor.loadEmployee(newData));
     })
     .catch((err) => {
       console.log({ err });
-      dispatch(actions.employeeList.showError(err.message));
+      dispatch(actions.editor.showError(err.message));
     });
 };
 
 export const deleteById = (id: number): AppThunk => (dispatch) => {
-  dispatch(actions.employeeList.getList());
+  dispatch(actions.editor.setLoading());
   axios
     .delete(`/employee/${id}`)
     .then((res) => {
       console.log({ res });
-      dispatch(getListCall());
+      dispatch(actions.editor.loadEmployee(emptyEmployee));
     })
     .catch((err) => {
       console.log({ err });
-      dispatch(actions.employeeList.showError(err.message));
+      dispatch(actions.editor.showError(err.message));
     });
 };
 
@@ -70,24 +54,23 @@ export const loadEmployee = (id: string | "new"): AppThunk => (dispatch) => {
       })
       .catch((err) => {
         console.log({ err });
-        dispatch(actions.employeeList.showError(err.message));
+        dispatch(actions.editor.showError(err.message));
       });
   }
 };
 
-export const addNewEmployeeThunk = (
-  id: number,
-  newData: RawTableData
-): AppThunk => (dispatch) => {
+export const addNewEmployeeThunk = (newData: RawTableData): AppThunk => (
+  dispatch
+) => {
   dispatch(actions.editor.sending());
   axios
     .put(`/employee/new`, newData)
     .then((res) => {
       console.log({ res });
-      dispatch(actions.editor.savedEdit(id));
+      dispatch(actions.editor.savedEdit(parseInt(res.data.id)));
     })
     .catch((err) => {
       console.log({ err });
-      dispatch(actions.employeeList.showError(err.message));
+      dispatch(actions.editor.showError(err.message));
     });
 };

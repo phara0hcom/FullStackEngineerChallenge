@@ -6,31 +6,31 @@ import Button from "react-bootstrap/Button";
 
 import Section from "../../components/Layout/Section";
 import ConfirmModal from "../../components/Layout/ConfirmModal";
+import Loading from "../../components/Layout/Loading";
 
 import {
   deleteById,
   loadEmployee,
   changeEmployeeThunk,
   addNewEmployeeThunk,
-} from "../../store/employeeReview/thunkFunc";
+} from "../../store/employeeEditor/thunkFunc";
 import { RootStore } from "../../store/rootReducer";
-import { RawTableData } from "../../store/employeeReview/types";
-import employeeReviewActions from "../../store/employeeReview/actions";
-import Loading from "../../components/Layout/Loading";
+import { RawTableData } from "../../store/employeeList/types";
+import employeeEditorActions from "../../store/employeeEditor/actions";
 
 const mapStateToProps = (
   state: RootStore
 ): {
   loadingEditor: boolean;
-  employeeSending: boolean | number;
+  employeeSending: boolean;
   employeeForm: RawTableData;
 } => {
-  const employeeReviewJS = state.employeeReview.toJS();
+  const employeeEditorJS = state.employeeEditor.toJS();
 
   return {
-    loadingEditor: employeeReviewJS.loadingEditor,
-    employeeSending: employeeReviewJS.employeeSending,
-    employeeForm: employeeReviewJS.employeeForm,
+    loadingEditor: employeeEditorJS.loadingEditor,
+    employeeSending: employeeEditorJS.employeeSending,
+    employeeForm: employeeEditorJS.employeeForm,
   };
 };
 
@@ -58,15 +58,19 @@ const EmployeeEditor: React.SFC<EditorProps> = ({
   useEffect(() => {
     dispatch(loadEmployee(paramId));
 
-    if (employeeSending === -1) {
-      history.replace("/");
-    } else if (typeof employeeSending === "number") {
-      history.replace(`/`);
-    }
-
     return () => {
-      dispatch(employeeReviewActions.editor.setLoading());
+      dispatch(employeeEditorActions.editor.setLoading());
     };
+    // On-mount and return on un-mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (paramId !== "new" && id === -1) {
+      history.replace(`/edit/new`);
+    } else if (id !== -1 && paramId !== `${id}`) {
+      history.replace(`/edit/${id}`);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paramId, employeeSending]);
 
@@ -91,7 +95,7 @@ const EmployeeEditor: React.SFC<EditorProps> = ({
   const onEditForm = (
     input: "firstName" | "lastName" | "email" | "manager"
   ) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(employeeReviewActions.editor.editForm(input, event.target.value));
+    dispatch(employeeEditorActions.editor.editForm(input, event.target.value));
   };
 
   const errorInput = (input: string) => {
@@ -119,7 +123,7 @@ const EmployeeEditor: React.SFC<EditorProps> = ({
       dispatch(changeEmployeeThunk(id, employeeForm));
     } else {
       // save new
-      dispatch(addNewEmployeeThunk(id, employeeForm));
+      dispatch(addNewEmployeeThunk(employeeForm));
     }
   };
 
@@ -134,6 +138,7 @@ const EmployeeEditor: React.SFC<EditorProps> = ({
             <Form.Group controlId="formBasicEmail">
               <Form.Label>First name</Form.Label>
               <Form.Control
+                disabled={employeeSending}
                 value={firstName}
                 onChange={onEditForm("firstName")}
                 placeholder="First name"
@@ -146,6 +151,7 @@ const EmployeeEditor: React.SFC<EditorProps> = ({
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Last Name</Form.Label>
               <Form.Control
+                disabled={employeeSending}
                 value={lastName}
                 onChange={onEditForm("lastName")}
                 placeholder="Last name"
@@ -158,6 +164,7 @@ const EmployeeEditor: React.SFC<EditorProps> = ({
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control
+                disabled={employeeSending}
                 value={email}
                 onChange={onEditForm("email")}
                 placeholder="Enter e-mail"
@@ -170,6 +177,7 @@ const EmployeeEditor: React.SFC<EditorProps> = ({
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Manager</Form.Label>
               <Form.Control
+                disabled={employeeSending}
                 value={manager}
                 onChange={onEditForm("manager")}
                 placeholder="Manager"
@@ -181,7 +189,7 @@ const EmployeeEditor: React.SFC<EditorProps> = ({
             </Form.Group>
 
             <Button
-              disabled={!validateForm() || employeeSending === true}
+              disabled={!validateForm() || employeeSending}
               onClick={saveEmployee(id)}
               variant="primary"
               type="button"

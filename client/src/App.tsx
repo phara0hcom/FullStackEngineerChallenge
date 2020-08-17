@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Header from "./components/Header/Header";
 import EmployeeEditor from "./Container/EmployeeEditor/EmployeeEditor";
-import List from "./Container/List/List";
+import EmployeeList from "./Container/EmployeeList/EmployeeList";
 
 function App() {
   return (
@@ -14,7 +14,7 @@ function App() {
           <EmployeeEditor />
         </Route>
         <Route path="/">
-          <List />
+          <EmployeeList />
         </Route>
       </Switch>
     </Router>
