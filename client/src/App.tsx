@@ -2,8 +2,8 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import Header from "./components/Header/Header";
-import EmployeeEditor from "./container/EmployeeEditor/EmployeeEditor";
-import List from "./container/List/List";
+import EmployeeEditor from "./Container/EmployeeEditor/EmployeeEditor";
+import List from "./Container/List/List";
 
 function App() {
   return (
