@@ -60,7 +60,7 @@ const userDB = {
           data.firstName,
           data.lastName,
           data.email,
-          data.lastReview,
+          data.lastReview || "NULL",
           data.manager,
           id,
         ],
@@ -85,6 +85,29 @@ const userDB = {
           return resolve(results);
         }
       });
+    }),
+
+  putNew: (data) =>
+    new Promise((resolve, reject) => {
+      pool.query(
+        `INSERT INTO employees SET ?`,
+        {
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          lastReview: data.lastReview,
+          manager: data.manager,
+        },
+        (err, results) => {
+          if (err) {
+            console.log("putById", { err });
+            return reject(err);
+          } else {
+            console.log("putById", { results });
+            return resolve(results);
+          }
+        }
+      );
     }),
 };
 

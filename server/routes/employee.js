@@ -34,7 +34,7 @@ router.get("/name/:name", async (req, res, next) => {
   }
 });
 
-router.put("/:id", async (req, res, next) => {
+router.put("/edit/:id", async (req, res, next) => {
   console.log({ body: req.body });
   console.log({ params: req.params });
   try {
@@ -50,7 +50,7 @@ router.put("/new", async (req, res, next) => {
   console.log({ body: req.body });
   console.log({ params: req.params });
   try {
-    const response = await userDB.putById(req.params.id, req.body);
+    const response = await userDB.putNew(req.body);
     res.json({ status: "changed", id: req.params.id });
   } catch (error) {
     console.log({ error });
