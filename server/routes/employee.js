@@ -11,6 +11,7 @@ router.get("/", async (req, res, next) => {
   } catch (error) {
     console.log({ error });
     res.statusCode(500);
+    res.render("error", { error: err });
   }
 });
 
@@ -21,6 +22,7 @@ router.get("/id/:id", async (req, res, next) => {
   } catch (error) {
     console.log({ error });
     res.statusCode(500);
+    res.render("error", { error: err });
   }
 });
 
@@ -31,42 +33,40 @@ router.get("/name/:name", async (req, res, next) => {
   } catch (error) {
     console.log({ error });
     res.statusCode(500);
+    res.render("error", { error: err });
   }
 });
 
 router.put("/edit/:id", async (req, res, next) => {
-  console.log({ body: req.body });
-  console.log({ params: req.params });
   try {
     const response = await userDB.putById(req.params.id, req.body);
-    res.json({ status: "changed", id: req.params.id });
+    res.json({ status: "changed", id: req.params.id, response });
   } catch (error) {
     console.log({ error });
     res.statusCode(500);
+    res.render("error", { error: err });
   }
 });
 
 router.put("/new", async (req, res, next) => {
-  console.log({ body: req.body });
-  console.log({ params: req.params });
   try {
     const response = await userDB.putNew(req.body);
-    res.json({ status: "changed", id: req.params.id });
+    res.json(response);
   } catch (error) {
     console.log({ error });
     res.statusCode(500);
+    res.render("error", { error: err });
   }
 });
 
 router.delete("/:id", async (req, res, next) => {
-  console.log({ body: req.body });
-  console.log({ params: req.params });
   try {
     const response = await userDB.deleteById(req.params.id, req.body);
-    res.json({ status: "deleted", id: req.params.id });
+    res.json({ status: "deleted", id: req.params.id, response });
   } catch (error) {
     console.log({ error });
     res.statusCode(500);
+    res.render("error", { error: err });
   }
 });
 

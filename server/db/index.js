@@ -60,7 +60,7 @@ const userDB = {
           data.firstName,
           data.lastName,
           data.email,
-          data.lastReview || "NULL",
+          data.lastReview,
           data.manager,
           id,
         ],
@@ -104,7 +104,7 @@ const userDB = {
             return reject(err);
           } else {
             console.log("putById", { results });
-            return resolve(results);
+            return resolve({ status: "inserted", id: results.insertId });
           }
         }
       );
