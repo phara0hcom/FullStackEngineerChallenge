@@ -55,14 +55,13 @@ const userDB = {
   putById: (id, data) =>
     new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE employees SET firstName = ?, lastName = ?, email = ? , lastReview = ?, reviews = ?, assignTo = ? WHERE id = ?`,
+        `UPDATE employees SET firstName = ?, lastName = ?, email = ? , lastReview = ? , manager = ? WHERE id = ?`,
         [
           data.firstName,
           data.lastName,
           data.email,
           data.lastReview,
-          data.reviews,
-          data.assignTo,
+          data.manager,
           id,
         ],
         (err, results) => {
