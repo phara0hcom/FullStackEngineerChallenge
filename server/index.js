@@ -2,7 +2,7 @@ const cors = require("cors");
 const express = require("express");
 var bodyParser = require("body-parser");
 
-const apiRouter = require("./routes");
+const employeeRouter = require("./routes/employee");
 
 const app = express();
 
@@ -16,7 +16,7 @@ app.use(
   })
 );
 
-app.use("/api", apiRouter);
+app.use("/api/employee", employeeRouter);
 
 app.listen(process.env.REACT_APP_SERVER_PORT || 8000, () => {
   console.log(

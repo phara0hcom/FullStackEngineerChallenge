@@ -32,6 +32,7 @@ CREATE TABLE `employees` (
   `firstName` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `lastName` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `reviewerOf` bigint(20) NULL,
   `lastReview` int(11) DEFAULT NULL,
   `manager` varchar(100) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
