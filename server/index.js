@@ -18,6 +18,8 @@ app.use(
 
 app.use("/api/employee", employeeRouter);
 
+// TODO: Implement /api/review route
+
 app.listen(process.env.REACT_APP_SERVER_PORT || 8000, () => {
   console.log(
     `App server now listening on port ${

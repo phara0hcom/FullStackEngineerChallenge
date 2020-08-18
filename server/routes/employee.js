@@ -18,6 +18,8 @@ router.get("/", async (req, res, next) => {
 router.get("/id/:id", async (req, res, next) => {
   try {
     const response = await userDB.userBy("id", req.params.id);
+    // TODO: return reviewers
+    // TODO: return employee to review and date and review id
     res.json(response);
   } catch (error) {
     console.log({ error });
