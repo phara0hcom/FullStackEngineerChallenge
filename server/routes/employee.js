@@ -42,7 +42,7 @@ router.get("/name/:name", async (req, res, next) => {
 router.put("/edit/:id", async (req, res, next) => {
   try {
     const response = await userDB.putById(req.params.id, req.body);
-    res.json({ status: "changed", id: req.params.id, response });
+    res.json({ status: "changed", id: parseInt(req.params.id), response });
   } catch (error) {
     console.log({ error });
     res.statusCode(500);
@@ -64,7 +64,7 @@ router.put("/new", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const response = await userDB.deleteById(req.params.id, req.body);
-    res.json({ status: "deleted", id: req.params.id, response });
+    res.json({ status: "deleted", id: parseInt(req.params.id), response });
   } catch (error) {
     console.log({ error });
     res.statusCode(500);

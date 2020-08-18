@@ -21,11 +21,9 @@ export const deleteById = (id: number): AppThunk => (dispatch) => {
   axios
     .delete(`/employee/${id}`)
     .then((res) => {
-      console.log({ res });
       dispatch(getListCall());
     })
     .catch((err) => {
-      console.log({ err });
       dispatch(actions.employeeList.showError(err.message));
     });
 };

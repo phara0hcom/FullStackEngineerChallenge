@@ -38,8 +38,8 @@ const userDB = {
 
         default:
           pool.query(
-            `SELECT * FROM employees WHERE name = ?`,
-            value,
+            `SELECT * FROM employees WHERE firstName LIKE ? OR lastName LIKE ?`,
+            [value, value],
             (err, results) => {
               if (err) {
                 return reject(err);
@@ -66,10 +66,8 @@ const userDB = {
         ],
         (err, results) => {
           if (err) {
-            console.log("putById", { err });
             return reject(err);
           } else {
-            console.log("putById", { results });
             return resolve(results);
           }
         }
@@ -100,10 +98,8 @@ const userDB = {
         },
         (err, results) => {
           if (err) {
-            console.log("putById", { err });
             return reject(err);
           } else {
-            console.log("putById", { results });
             return resolve({ status: "inserted", id: results.insertId });
           }
         }

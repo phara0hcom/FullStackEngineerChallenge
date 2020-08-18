@@ -14,11 +14,9 @@ export const changeEmployeeThunk = (
   axios
     .put(`/employee/edit/${id}`, newData)
     .then((res) => {
-      console.log({ res });
       dispatch(actions.editor.loadEmployee(newData));
     })
     .catch((err) => {
-      console.log({ err });
       dispatch(actions.editor.showError(err.message));
     });
 };
@@ -28,11 +26,9 @@ export const deleteById = (id: number): AppThunk => (dispatch) => {
   axios
     .delete(`/employee/${id}`)
     .then((res) => {
-      console.log({ res });
       dispatch(actions.editor.loadEmployee(emptyEmployee));
     })
     .catch((err) => {
-      console.log({ err });
       dispatch(actions.editor.showError(err.message));
     });
 };
@@ -45,7 +41,6 @@ export const loadEmployee = (id: string | "new"): AppThunk => (dispatch) => {
     axios
       .get(`/employee/id/${id}`)
       .then((res: AxiosResponse<Array<RawTableData>>) => {
-        console.log({ res });
         if (res.data.length > 0) {
           dispatch(actions.editor.loadEmployee(res.data[0]));
         } else {
@@ -53,7 +48,6 @@ export const loadEmployee = (id: string | "new"): AppThunk => (dispatch) => {
         }
       })
       .catch((err) => {
-        console.log({ err });
         dispatch(actions.editor.showError(err.message));
       });
   }
@@ -66,11 +60,9 @@ export const addNewEmployeeThunk = (newData: RawTableData): AppThunk => (
   axios
     .put(`/employee/new`, newData)
     .then((res) => {
-      console.log({ res });
       dispatch(actions.editor.savedEdit(parseInt(res.data.id)));
     })
     .catch((err) => {
-      console.log({ err });
       dispatch(actions.editor.showError(err.message));
     });
 };
