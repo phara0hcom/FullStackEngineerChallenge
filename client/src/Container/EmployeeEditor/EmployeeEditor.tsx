@@ -68,10 +68,7 @@ const EmployeeEditor: React.SFC<EditorProps> = ({
   useEffect(() => {
     // if the user arrived with a ID in the URL that is not found
     // they will be redirected to /edit/new
-
-    console.log({ paramId, id });
     if (!(paramId === "new" && id === -1) && paramId !== `${id}`) {
-      console.log({ paramId });
       dispatch(loadEmployee(paramId));
     }
 
