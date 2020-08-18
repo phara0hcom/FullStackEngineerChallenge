@@ -10,11 +10,11 @@ export const changeEmployeeThunk = (
   id: number,
   newData: RawTableData
 ): AppThunk => (dispatch) => {
-  dispatch(actions.editor.sending());
+  dispatch(actions.editor.sending(true));
   axios
     .put(`/employee/edit/${id}`, newData)
     .then((res) => {
-      dispatch(actions.editor.loadEmployee(newData));
+      dispatch(actions.editor.loadEditedEmployee(newData));
     })
     .catch((err) => {
       dispatch(actions.editor.showError(err.message));
@@ -56,11 +56,13 @@ export const loadEmployee = (id: string | "new"): AppThunk => (dispatch) => {
 export const addNewEmployeeThunk = (newData: RawTableData): AppThunk => (
   dispatch
 ) => {
-  dispatch(actions.editor.sending());
+  dispatch(actions.editor.sending(true));
   axios
     .put(`/employee/new`, newData)
     .then((res) => {
-      dispatch(actions.editor.savedEdit(parseInt(res.data.id)));
+      dispatch(
+        actions.editor.loadEditedEmployee({ ...newData, id: res.data.id })
+      );
     })
     .catch((err) => {
       dispatch(actions.editor.showError(err.message));

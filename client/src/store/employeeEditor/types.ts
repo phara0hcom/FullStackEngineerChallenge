@@ -8,6 +8,7 @@ export interface EmployeeEditorStoreActions {
     error?: string;
     input?: string;
     value?: string;
+    sending?: boolean;
   };
 }
 

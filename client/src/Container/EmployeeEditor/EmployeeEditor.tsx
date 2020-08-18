@@ -66,14 +66,21 @@ const EmployeeEditor: React.SFC<EditorProps> = ({
   }, []);
 
   useEffect(() => {
-    if (paramId !== "new" && id === -1) {
-      history.replace(`/edit/new`);
-    } else if (id !== -1 && paramId !== `${id}`) {
-      history.replace(`/edit/${id}`);
+    // if the user arrived with a ID in the URL that is not found
+    // they will be redirected to /edit/new
+
+    console.log({ paramId, id });
+    if (!(paramId === "new" && id === -1) && paramId !== `${id}`) {
+      console.log({ paramId });
+      dispatch(loadEmployee(paramId));
+    }
+
+    if (loadingEditor && employeeSending) {
+      history.replace(`/`);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paramId, id]);
+  }, [paramId, id, loadingEditor, employeeSending]);
 
   const deleteRow = (id: number) => () => {
     // show model

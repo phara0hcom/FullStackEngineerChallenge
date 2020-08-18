@@ -17,12 +17,17 @@ const Actions = {
       type: Constants.EDITOR_CHANGE_FORM,
       payload: { input, value },
     }),
-    sending: () => ({
+    sending: (sending: boolean) => ({
       type: Constants.EDITOR_SENDING,
+      payload: { sending },
     }),
     savedEdit: (id: number) => ({
       type: Constants.EDITOR_EDIT_SAVED,
       payload: { id },
+    }),
+    loadEditedEmployee: (employee: RawTableData) => ({
+      type: Constants.EDITOR_SET_EDITED_EMPLOYEE_FORM,
+      payload: { employee },
     }),
     showError: (error: string) => ({
       type: Constants.EDITOR_SHOW_ERROR,

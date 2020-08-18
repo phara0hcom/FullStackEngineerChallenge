@@ -48,9 +48,7 @@ const List: React.SFC<ListProps> = ({
   const [deleteModal, setDeleteModal] = useState({ show: false, id: -1 });
 
   useEffect(() => {
-    if (loadingList) {
-      dispatch(getListCall());
-    }
+    dispatch(getListCall());
     // only run on Loading on mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -119,11 +117,11 @@ const List: React.SFC<ListProps> = ({
         <StripeTable
           headers={[
             { name: "id", key: "id" },
-            { name: "Last review", key: "lastReview" },
             { name: "Last name", key: "lastName" },
             { name: "First name", key: "firstName" },
             { name: "email", key: "email" },
             { name: "Manager", key: "manager" },
+            { name: "Last review", key: "lastReview" },
             { name: "Edit", key: "buttons" },
           ]}
           data={processEmployeeTable(employees)}

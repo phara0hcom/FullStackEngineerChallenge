@@ -23,6 +23,11 @@ export default function employeeList(
         .set("loadingEditor", false)
         .set("employeeSending", false);
 
+    case constants.EDITOR_SET_EDITED_EMPLOYEE_FORM:
+      return state
+        .set("employeeForm", action.payload?.employee)
+        .set("loadingEditor", true);
+
     case constants.EDITOR_CHANGE_FORM: {
       const input = action.payload?.input;
       if (!input) return state;
@@ -33,13 +38,15 @@ export default function employeeList(
     }
 
     case constants.EDITOR_SENDING:
-      return state.set("employeeSending", true);
+      return state.set("employeeSending", action.payload?.sending);
 
     case constants.EDITOR_EDIT_SAVED:
-      return state.set("employeeSending", false).set("employeeForm", {
-        ...state.get("employeeForm"),
-        id: action.payload?.id,
-      });
+      return state
+        .set("employeeForm", {
+          ...state.get("employeeForm"),
+          id: action.payload?.id,
+        })
+        .set("loadingEditor", false);
 
     case constants.EDITOR_SHOW_ERROR:
       return state.set("errorMessage", action.payload?.error || null);
