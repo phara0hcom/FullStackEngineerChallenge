@@ -71,8 +71,9 @@ const EmployeeEditor: React.SFC<EditorProps> = ({
     } else if (id !== -1 && paramId !== `${id}`) {
       history.replace(`/edit/${id}`);
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paramId, employeeSending]);
+  }, [paramId, id]);
 
   const deleteRow = (id: number) => () => {
     // show model
